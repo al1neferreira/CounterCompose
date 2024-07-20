@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,20 +27,25 @@ import androidx.compose.ui.unit.sp
 import com.example.countercompose.ui.theme.CounterComposeTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val viewModel by viewModels<CounterViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             CounterComposeTheme {
-                ClickCount()
+                ClickCount(viewModel = viewModel)
             }
         }
     }
 }
 
 @Composable
-fun ClickCount() {
-    var count by remember { mutableIntStateOf(value = 0) }
+fun ClickCount(
+    viewModel: CounterViewModel
+) {
+    var count by remember { mutableIntStateOf(viewModel.getCount()) }
 
     Column(
         modifier = Modifier
@@ -55,7 +61,8 @@ fun ClickCount() {
         Spacer (modifier = Modifier.size(10.dp))
 
         Button(onClick = {
-            count += 1
+            viewModel.increment()
+            count = viewModel.getCount()
         }) {
             Text(text = "Increment")
         }
