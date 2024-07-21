@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,18 +21,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.countercompose.ui.theme.CounterComposeTheme
 
 class MainActivity : ComponentActivity() {
-
-    private val viewModel by viewModels<CounterViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             CounterComposeTheme {
-                ClickCount(viewModel = viewModel)
+                ClickCount()
             }
         }
     }
@@ -41,7 +39,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ClickCount(
-    viewModel: CounterViewModel
+    viewModel: CounterViewModel = viewModel()
 ) {
     var count by remember { mutableIntStateOf(viewModel.getCount()) }
 
